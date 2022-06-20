@@ -12,8 +12,10 @@ describe "Account Class" do
       expect(test_account.balance).to eq 0
     end
 
-    it "raises an error when invalid name is provided" do
+    it "raises an error when digits are provided in name" do
       expect{ Account.create_account(123) }.to raise_error "Input Error: Invalid name."
+      expect{ Account.create_account("123") }.to raise_error "Input Error: Invalid name."
+      expect{ Account.create_account("abc123") }.to raise_error "Input Error: Invalid name."
     end
   end
 end

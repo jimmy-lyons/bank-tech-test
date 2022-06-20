@@ -7,7 +7,12 @@ class Account
   end
  
   def self.create_account(name)
-    raise "Input Error: Invalid name." unless name =~ /\D/
+    raise "Input Error: Invalid name." unless name.is_a? String
+    
+    if name =~ /\d/
+      raise "Input Error: Invalid name."
+    end
+
     return Account.new(name: name)
   end
 end

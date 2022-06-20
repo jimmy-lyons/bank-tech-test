@@ -1,6 +1,12 @@
-# frozen_string_literal: true
-
 source "https://rubygems.org"
 
-gem 'rspec'
-gem 'pg'
+ruby '3.0.2'
+
+group :test do
+  gem 'rspec'
+  gem 'pg'
+end
+
+group :development, :test do
+  gem 'rubocop', '1.20'
+end

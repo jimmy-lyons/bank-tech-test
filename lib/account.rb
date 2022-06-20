@@ -1,5 +1,12 @@
 class Account 
- def self.create_account
-  return Account.new
- end
+  attr_reader :name, :balance
+
+  def initialize(name)
+    @name = name
+    @balance = 0
+  end
+ 
+  def self.create_account(name)
+    return Account.new(name)
+  end
 end

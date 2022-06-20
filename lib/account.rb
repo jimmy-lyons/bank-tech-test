@@ -1,3 +1,5 @@
+require './database_connection_setup'
+
 class Account 
   attr_reader :name, :balance
 
@@ -9,7 +11,12 @@ class Account
   def self.create_account(name)
     raise "Input Error: Invalid name." unless name_validation(name)
 
-    return Account.new(name: name)
+    result = DatabaseConnection.query(
+      "INSERT INTO accounts (username, balance) VALUES($1, 0) RETURNING user_id, username, balance;",
+      [name]
+    )
+
+    return Account.new(name: result[0]['username'])
   end
 
   def self.deposit(id:, value:)

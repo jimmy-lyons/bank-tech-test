@@ -18,4 +18,10 @@ describe "Account Class" do
       expect{ Account.create_account("abc123") }.to raise_error "Input Error: Invalid name."
     end
   end
+
+  describe ".deposit" do
+    it "accepts an account number and value, and returns the updated balance" do
+      expect(Account.deposit(id: 1, value: 100)).to eq 100
+    end
+  end
 end

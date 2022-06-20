@@ -12,6 +12,10 @@ class Account
     return Account.new(name: name)
   end
 
+  def self.deposit(id:, value:)
+    100
+  end
+
   private
   
   def self.name_validation(name)

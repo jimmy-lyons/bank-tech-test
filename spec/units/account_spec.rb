@@ -11,5 +11,9 @@ describe "Account Class" do
       expect(test_account.name).to eq 'Joe Bloggs'
       expect(test_account.balance).to eq 0
     end
+
+    it "raises an error when invalid name is provided" do
+      expect{ Account.create_account(123) }.to raise_error "Input Error: Invalid name."
+    end
   end
 end

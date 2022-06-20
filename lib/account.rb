@@ -7,6 +7,7 @@ class Account
   end
  
   def self.create_account(name)
+    raise "Input Error: Invalid name." unless name =~ /\D/
     return Account.new(name: name)
   end
 end

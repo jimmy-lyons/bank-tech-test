@@ -1,9 +1,10 @@
 require './database_connection_setup'
 
 class Account 
-  attr_reader :name, :balance
+  attr_reader :name, :balance, :id
 
-  def initialize(name:, balance: 0)
+  def initialize(id:, name:, balance: 0)
+    @id = id
     @name = name
     @balance = balance
   end
@@ -16,11 +17,27 @@ class Account
       [name]
     )
 
-    return Account.new(name: result[0]['username'])
+    return Account.new(
+      id: result[0]['user_id'],
+      name: result[0]['username'],
+      balance: result[0]['balance']
+    )
   end
 
   def self.deposit(id:, value:)
-    100
+    balance = DatabaseConnection.query("SELECT * FROM accounts WHERE user_id = $1;", [id])
+    new_balance = balance[0]['balance'].to_f + value
+
+    result = DatabaseConnection.query(
+      "UPDATE accounts SET balance = $1 WHERE user_id = $2 RETURNING user_id, username, balance;",
+      [new_balance, id]
+    )
+
+    return Account.new(
+      id: result[0]['user_id'],
+      name: result[0]['username'],
+      balance: (result[0]['balance']).to_f
+    )
   end
 
   private

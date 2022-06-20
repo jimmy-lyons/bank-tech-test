@@ -1,9 +1,9 @@
 class Account 
   attr_reader :name, :balance
 
-  def initialize(name:)
+  def initialize(name:, balance: 0)
     @name = name
-    @balance = 0
+    @balance = balance
   end
  
   def self.create_account(name)

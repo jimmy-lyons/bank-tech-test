@@ -13,9 +13,19 @@
 # it.
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'simplecov'
+require 'simplecov-console'
+SimpleCov.start
+
 ENV['RACK_ENV'] = 'test'
 require 'rspec'
 require_relative './set_up_test_database'
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+  SimpleCov::Formatter::Console,
+  # Want a nice code coverage website? Uncomment this next line!
+  # SimpleCov::Formatter::HTMLFormatter
+])
 
 RSpec.configure do |config|
   config.before(:each) do

@@ -25,18 +25,20 @@ class Account
 
     result = DatabaseConnection.query(
       "INSERT INTO accounts (username, balance) VALUES($1, 0) RETURNING user_id, username, balance;",
-      [name]
-    )
+      [name])
+
     return_instance_of_account(result)
   end
 
   def self.deposit(id:, value:)
+    raise "Input Error: Invalid value." unless value_validation(value)
+
     new_balance = calculate_new_balance(id, value)
 
     result = DatabaseConnection.query(
       "UPDATE accounts SET balance = $1 WHERE user_id = $2 RETURNING user_id, username, balance;",
-      [new_balance, id]
-    )
+      [new_balance, id])
+
     return_instance_of_account(result)
   end
 
@@ -63,6 +65,12 @@ class Account
       name: psql_result[0]['username'],
       balance: (psql_result[0]['balance']).to_f
     )
+  end
+
+  def self.value_validation(value)
+    return false unless value.is_a? Integer or value.is_a? Float
+    return false unless value > 0
+    true
   end
 
 end

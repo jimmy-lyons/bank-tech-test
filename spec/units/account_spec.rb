@@ -32,5 +32,17 @@ describe "Account Class" do
       account_bloggs = Account.deposit(id: account_bloggs.id, value: 100)
       expect(account_bloggs.balance).to eq 200
     end
+
+    it "throws error when given negative number" do
+      account_bloggs = Account.create_account('Joe Bloggs')
+      expect{ Account.deposit(id: account_bloggs.id, value: -100) }
+      .to raise_error "Input Error: Invalid value."
+    end
+    
+    it "throws error when given a string" do
+      account_bloggs = Account.create_account('Joe Bloggs')
+      expect{ Account.deposit(id: account_bloggs.id, value: "100") }
+      .to raise_error "Input Error: Invalid value."
+    end
   end
 end

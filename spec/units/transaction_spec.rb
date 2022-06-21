@@ -7,7 +7,7 @@ describe 'Transaction Class' do
   end
 
   describe '.record' do
-    it 'records and returns values of a transaction' do
+    it 'records and returns values of a transaction #example 1' do
       new_transaction = Transaction.record(
         user_id: 1, 
         credit: 123.45, 
@@ -18,6 +18,19 @@ describe 'Transaction Class' do
       expect(new_transaction.credit).to eq 123.45
       expect(new_transaction.debit).to eq 0
       expect(new_transaction.balance).to eq 223.45
+    end
+
+    it 'records and returns values of a transaction #example 2' do
+      new_transaction = Transaction.record(
+        user_id: 1, 
+        credit: 0, 
+        debit: 200, 
+        balance: 100
+      )
+      expect(new_transaction.user_id).to eq 1
+      expect(new_transaction.credit).to eq 0
+      expect(new_transaction.debit).to eq 200
+      expect(new_transaction.balance).to eq 100
     end
   end
 end

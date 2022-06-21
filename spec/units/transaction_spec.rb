@@ -18,6 +18,7 @@ describe 'Transaction Class' do
       expect(new_transaction.credit).to eq 123.45
       expect(new_transaction.debit).to eq 0
       expect(new_transaction.balance).to eq 223.45
+      expect(new_transaction.transaction_date).not_to be nil
     end
 
     it 'records and returns values of a transaction #example 2' do
@@ -31,6 +32,8 @@ describe 'Transaction Class' do
       expect(new_transaction.credit).to eq 0
       expect(new_transaction.debit).to eq 200
       expect(new_transaction.balance).to eq 100
+      expect(new_transaction.transaction_date).not_to be nil
     end
+
   end
 end

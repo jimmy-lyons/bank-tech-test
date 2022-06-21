@@ -36,13 +36,19 @@ class Transaction
       VALUES($1, $2, $3, $4, $5) RETURNING transaction_id, transaction_date, user_id, credit, debit, balance;",
       [Time.now.strftime("%d/%m/%Y %H:%M"), user_id, credit, debit, balance]
     )
+    return_instance_of_transaction(result)
+  end
 
-    Transaction.new(
-      user_id: (result[0]['user_id']).to_i, 
-      credit: (result[0]['credit']).to_f, 
-      debit: (result[0]['debit']).to_f, 
-      balance: (result[0]['balance']).to_f,
-      transaction_date: result[0]['transaction_date']
+  private
+
+  def self.return_instance_of_transaction(psql_result)
+    return Transaction.new(
+      user_id: (psql_result[0]['user_id']).to_i, 
+      credit: (psql_result[0]['credit']).to_f, 
+      debit: (psql_result[0]['debit']).to_f, 
+      balance: (psql_result[0]['balance']).to_f,
+      transaction_date: psql_result[0]['transaction_date']
     )
   end
+
 end

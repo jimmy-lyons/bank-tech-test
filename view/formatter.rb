@@ -18,4 +18,13 @@ class Formatter
     return statement
   end
 
+  def self.format_statement(transactions)
+    statement = "date || credit || debit || balance\n"
+    transactions.each do | trans |
+      statement = statement + "#{trans.transaction_date} || #{trans.credit} || #{trans.debit} || #{trans.balance}\n"
+    end
+    print statement
+    return statement
+  end
+
 end

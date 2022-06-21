@@ -1,7 +1,6 @@
 require './database_connection_setup'
 
 class Account 
-  attr_reader :name, :balance, :id
 
   def initialize(id:, name:, balance: 0)
     @id = id
@@ -9,6 +8,18 @@ class Account
     @balance = balance
   end
  
+  def id
+    @id
+  end
+
+  def name
+    @name
+  end
+
+  def balance
+    @balance
+  end
+
   def self.create_account(name)
     raise "Input Error: Invalid name." unless name_validation(name)
 
@@ -16,12 +27,7 @@ class Account
       "INSERT INTO accounts (username, balance) VALUES($1, 0) RETURNING user_id, username, balance;",
       [name]
     )
-
-    return Account.new(
-      id: result[0]['user_id'],
-      name: result[0]['username'],
-      balance: result[0]['balance']
-    )
+    return_instance_of_account(result)
   end
 
   def self.deposit(id:, value:)
@@ -31,12 +37,7 @@ class Account
       "UPDATE accounts SET balance = $1 WHERE user_id = $2 RETURNING user_id, username, balance;",
       [new_balance, id]
     )
-
-    return Account.new(
-      id: result[0]['user_id'],
-      name: result[0]['username'],
-      balance: (result[0]['balance']).to_f
-    )
+    return_instance_of_account(result)
   end
 
   private
@@ -54,6 +55,14 @@ class Account
   def self.calculate_new_balance(user_id, value)
     balance = DatabaseConnection.query("SELECT * FROM accounts WHERE user_id = $1;", [user_id])
     return balance[0]['balance'].to_f + value
+  end
+
+  def self.return_instance_of_account(psql_result)
+    return Account.new(
+      id: psql_result[0]['user_id'],
+      name: psql_result[0]['username'],
+      balance: (psql_result[0]['balance']).to_f
+    )
   end
 
 end

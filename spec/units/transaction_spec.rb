@@ -56,6 +56,10 @@ describe 'Transaction Class' do
       user_2_transactions.each do | transaction |
         expect(transaction.user_id).to eq 2
       end
+
+      expect(user_1_transactions[0].credit).to eq 1000
+      expect(user_1_transactions[1].balance).to eq 800
+      expect(user_1_transactions[2].debit).to eq 300
     end
   end
 end

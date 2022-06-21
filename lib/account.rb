@@ -25,8 +25,7 @@ class Account
   end
 
   def self.deposit(id:, value:)
-    balance = DatabaseConnection.query("SELECT * FROM accounts WHERE user_id = $1;", [id])
-    new_balance = balance[0]['balance'].to_f + value
+    new_balance = calculate_new_balance(id, value)
 
     result = DatabaseConnection.query(
       "UPDATE accounts SET balance = $1 WHERE user_id = $2 RETURNING user_id, username, balance;",
@@ -50,6 +49,11 @@ class Account
     end
 
     true
+  end
+
+  def self.calculate_new_balance(user_id, value)
+    balance = DatabaseConnection.query("SELECT * FROM accounts WHERE user_id = $1;", [user_id])
+    return balance[0]['balance'].to_f + value
   end
 
 end

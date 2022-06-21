@@ -42,6 +42,18 @@ class Account
     return_instance_of_account(result)
   end
 
+  def self.withdraw(id:, value:)
+    raise "Input Error: Invalid value." unless value_validation(value)
+
+    new_balance = calculate_new_balance(id, (-1 * value))
+
+    result = DatabaseConnection.query(
+      "UPDATE accounts SET balance = $1 WHERE user_id = $2 RETURNING user_id, username, balance;",
+      [new_balance, id])
+
+    return_instance_of_account(result)
+  end
+
   private
   
   def self.name_validation(name)

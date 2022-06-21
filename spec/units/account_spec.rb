@@ -45,4 +45,13 @@ describe "Account Class" do
       .to raise_error "Input Error: Invalid value."
     end
   end
+
+  describe ".withdraw" do
+    it "deducts 100 from balance" do
+      account_bloggs = Account.create_account('Joe Bloggs')
+      Account.deposit(id: account_bloggs.id, value: 500)
+      account_bloggs = Account.withdraw(id: account_bloggs.id, value: 100)
+      expect(account_bloggs.balance).to eq 400
+    end
+  end
 end

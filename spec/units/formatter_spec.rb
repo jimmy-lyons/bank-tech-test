@@ -31,4 +31,5 @@ describe 'Formatter Class' do
       .to eq("Debit: £123.45, New Balance: £376.55")
     end
   end
+
 end

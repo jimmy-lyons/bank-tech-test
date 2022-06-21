@@ -25,7 +25,7 @@ describe 'Formatter Class' do
     end
   end
 
-  describe '.withdrawl confirmation' do
+  describe '.withdrawl_confirmation' do
     it 'displays the withdrawn value and the new balance' do
       expect(Formatter.withdrawl_confirmation(123.45, 376.55))
       .to eq("Debit: £123.45, New Balance: £376.55")

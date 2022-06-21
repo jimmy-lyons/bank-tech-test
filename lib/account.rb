@@ -22,35 +22,22 @@ class Account
 
   def self.create_account(name)
     raise "Input Error: Invalid name." unless name_validation(name)
-
     result = DatabaseConnection.query(
       "INSERT INTO accounts (username, balance) VALUES($1, 0) RETURNING user_id, username, balance;",
-      [name])
-
+      [name]
+    )
     return_instance_of_account(result)
   end
 
   def self.deposit(id:, value:)
     raise "Input Error: Invalid value." unless value_validation(value)
-
-    new_balance = calculate_new_balance(id, value)
-
-    result = DatabaseConnection.query(
-      "UPDATE accounts SET balance = $1 WHERE user_id = $2 RETURNING user_id, username, balance;",
-      [new_balance, id])
-
+    result = update_account_balance(id, value)
     return_instance_of_account(result)
   end
 
   def self.withdraw(id:, value:)
     raise "Input Error: Invalid value." unless value_validation(value)
-
-    new_balance = calculate_new_balance(id, (-1 * value))
-
-    result = DatabaseConnection.query(
-      "UPDATE accounts SET balance = $1 WHERE user_id = $2 RETURNING user_id, username, balance;",
-      [new_balance, id])
-
+    result = update_account_balance(id, (value * -1))
     return_instance_of_account(result)
   end
 
@@ -65,10 +52,25 @@ class Account
 
     true
   end
+  
+  def self.value_validation(value)
+    return false unless value.is_a? Integer or value.is_a? Float
+    return false unless value > 0
+    true
+  end
 
   def self.calculate_new_balance(user_id, value)
     balance = DatabaseConnection.query("SELECT * FROM accounts WHERE user_id = $1;", [user_id])
     return balance[0]['balance'].to_f + value
+  end
+
+  def self.update_account_balance(id, value)
+    new_balance = calculate_new_balance(id, (value))
+
+    return DatabaseConnection.query(
+      "UPDATE accounts SET balance = $1 WHERE user_id = $2 RETURNING user_id, username, balance;",
+      [new_balance, id]
+    )
   end
 
   def self.return_instance_of_account(psql_result)
@@ -77,12 +79,6 @@ class Account
       name: psql_result[0]['username'],
       balance: (psql_result[0]['balance']).to_f
     )
-  end
-
-  def self.value_validation(value)
-    return false unless value.is_a? Integer or value.is_a? Float
-    return false unless value > 0
-    true
   end
 
 end

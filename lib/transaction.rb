@@ -39,6 +39,23 @@ class Transaction
     return_instance_of_transaction(result)
   end
 
+  def self.statement(user_id:)
+    result = DatabaseConnection.query(
+      "SELECT * FROM transactions WHERE user_id = $1;", [user_id]
+    )
+    transactions = []
+    result.each do | transaction |
+      transactions << Transaction.new(
+        user_id: (transaction['user_id']).to_i, 
+        credit: (transaction['credit']).to_f, 
+        debit: (transaction['debit']).to_f, 
+        balance: (transaction['balance']).to_f,
+        transaction_date: transaction['transaction_date']
+      )
+    end
+    return transactions
+  end
+
   private
 
   def self.return_instance_of_transaction(psql_result)

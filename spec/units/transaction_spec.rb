@@ -34,6 +34,28 @@ describe 'Transaction Class' do
       expect(new_transaction.balance).to eq 100
       expect(new_transaction.transaction_date).not_to be nil
     end
+  end
 
+  describe '.statement' do
+    it 'returns all statements of specific user' do
+      Transaction.record(user_id: 1, credit: 1000, debit: 0, balance: 1000)
+      Transaction.record(user_id: 1, credit: 0, debit: 200, balance: 800)
+      Transaction.record(user_id: 1, credit: 0, debit: 300, balance: 500)
+
+      Transaction.record(user_id: 2, credit: 2000, debit: 0, balance: 2000)
+      Transaction.record(user_id: 2, credit: 0, debit: 1000, balance: 100)
+      Transaction.record(user_id: 2, credit: 0, debit: 500, balance: 500)
+
+      user_1_transactions = Transaction.statement(user_id: 1)
+      user_2_transactions = Transaction.statement(user_id: 2)
+
+      user_1_transactions.each do | transaction |
+        expect(transaction.user_id).to eq 1
+      end
+
+      user_2_transactions.each do | transaction |
+        expect(transaction.user_id).to eq 2
+      end
+    end
   end
 end

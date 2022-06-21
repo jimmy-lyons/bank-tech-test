@@ -12,4 +12,10 @@ class Formatter
     return statement
   end
 
+  def self.withdrawl_confirmation(value, new_balance)
+    statement = "Debit: £#{sprintf('%.2f', value)}, New Balance: £#{sprintf('%.2f', new_balance)}"
+    p statement
+    return statement
+  end
+
 end

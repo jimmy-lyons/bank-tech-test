@@ -3,6 +3,7 @@
 ## How to use
 
 * Fork repo and clone to local directory.
+* Run 'bundle install' to install all gems.
 * To set up databases, follow the instructions in db/migrations/01_db_and_table_setup.
 * To run RSPec, type 'rspec' in terminal.
 
